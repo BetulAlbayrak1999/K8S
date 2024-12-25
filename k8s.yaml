@@ -1,0 +1,42 @@
+# Deployment Definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-bootcamp
+  namespace: default
+  labels:
+    app: kubernetes-bootcamp
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: kubernetes-bootcamp
+  template:
+    metadata:
+      labels:
+        app: kubernetes-bootcamp
+    spec:
+      containers:
+      - name: kubernetes-bootcamp
+        image: gcr.io/google-samples/kubernetes-bootcamp:v1
+        ports:
+        - containerPort: 8080
+
+---
+# Service Definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-bootcamp
+  namespace: default
+  labels:
+    app: kubernetes-bootcamp
+spec:
+  type: NodePort
+  selector:
+    app: kubernetes-bootcamp
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8080
+    nodePort: 31111
